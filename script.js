@@ -19,15 +19,18 @@ function getEmptyCells() {
 }
 
 function computerMove() {
-    const emptyCells = getEmptyCells();
+    const board = Array.from(cells).map(cell => cell.dataset.mark);
+    const move = getBestMove(board);
 
-    if (emptyCells.length > 0) {
-        const randomIndex = Math.floor(Math.random() * emptyCells.length);
-        const chosenCell = emptyCells[randomIndex];
-        chosenCell.dataset.mark = currentPlayer;
-        chosenCell.textContent = currentPlayer;
+    if (move !== undefined) {
+        cells[move].dataset.mark = currentPlayer;
+        const img = cells[move].querySelector('img');
+        img.src = currentPlayer === 'X' ? xImageURL : oImageURL;
+        img.alt = currentPlayer;
+        img.style.display = 'block';
     }
 }
+
 
 function handleClick(event) {
     const cell = event.target;
@@ -71,3 +74,82 @@ const resetButton = document.getElementById('reset');
 resetButton.addEventListener('click', () => {
     location.reload();
 });
+function minimax(board, depth, isMaximizing) {
+    // ...
+}
+
+function getBestMove(board) {
+    // ...
+}
+
+function isBoardFull(board) {
+    // ...
+}
+
+function checkWinOnBoard(board) {
+    // ...
+}
+function minimax(board, depth, isMaximizing) {
+    let winner = checkWinOnBoard(board);
+    if (winner !== null) {
+        return winner === 'X' ? -1 : 1;
+    }
+
+    if (depth === 0 || isBoardFull(board)) {
+        return 0;
+    }
+
+    if (isMaximizing) {
+        let bestScore = -Infinity;
+        for (let i = 0; i < board.length; i++) {
+            if (!board[i]) {
+                board[i] = 'O';
+                let score = minimax(board, depth - 1, false);
+                board[i] = null;
+                bestScore = Math.max(score, bestScore);
+            }
+        }
+        return bestScore;
+    } else {
+        let bestScore = Infinity;
+        for (let i = 0; i < board.length; i++) {
+            if (!board[i]) {
+                board[i] = 'X';
+                let score = minimax(board, depth - 1, true);
+                board[i] = null;
+                bestScore = Math.min(score, bestScore);
+            }
+        }
+        return bestScore;
+    }
+}
+
+function getBestMove(board) {
+    let bestScore = -Infinity;
+    let move;
+
+    for (let i = 0; i < board.length; i++) {
+        if (!board[i]) {
+            board[i] = 'O';
+            let score = minimax(board, 3, false);
+            board[i] = null;
+
+            if (score > bestScore) {
+                bestScore = score;
+                move = i;
+            }
+        }
+    }
+
+    return move;
+}
+
+function computerMove() {
+    const board = Array.from(cells).map(cell => cell.dataset.mark);
+    const move = getBestMove(board);
+
+    if (move !== undefined) {
+        cells[move].dataset.mark = currentPlayer;
+        cells[move].textContent = currentPlayer;
+    }
+}
