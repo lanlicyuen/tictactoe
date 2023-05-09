@@ -40,11 +40,11 @@ function handleClick(event) {
     cell.textContent = currentPlayer;
 
     if (checkWin(currentPlayer)) {
-        messageElement.textContent = `Player ${currentPlayer} wins!`;
+        messageElement.textContent = `玩家 ${currentPlayer} 胜出咯!`;
         cells.forEach(cell => cell.removeEventListener('click', handleClick));
         return;
     } else if (getEmptyCells().length === 0) {
-        messageElement.textContent = 'Draw!';
+        messageElement.textContent = '平手咯!';
         return;
     }
 
@@ -52,11 +52,11 @@ function handleClick(event) {
     computerMove();
 
     if (checkWin(currentPlayer)) {
-        messageElement.textContent = `Player ${currentPlayer} wins!`;
+        messageElement.textContent = `玩家 ${currentPlayer} 输掉咯!`;
         cells.forEach(cell => cell.removeEventListener('click', handleClick));
         return;
     } else if (getEmptyCells().length === 0) {
-        messageElement.textContent = 'Draw!';
+        messageElement.textContent = '平手咯!';
         return;
     }
 
